@@ -4,39 +4,41 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class SingUpTest {
+    public WebDriver driver;
 
+    @BeforeMethod
+    public void setUp () {
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        }
+     @AfterMethod
+     public void quit () {
+        driver.quit();
+     }
     @Test
     public void negativeZipCodeTestLettersInsteadOfDigits() {
-        WebDriverManager.chromedriver().setup();
-        WebDriver driver = new ChromeDriver();
-        driver.manage().window().maximize();
         driver.get("https://www.sharelane.com/cgi-bin/register.py");
         driver.findElement(By.name("zip_code")).sendKeys("ааааа");
         WebElement continueButton = driver.findElement(By.cssSelector("[value='Continue']"));
         continueButton.click();
         Assert.assertTrue(driver.findElement(By.className("error_message")).isDisplayed(), "Zipcode consisting of letters has been validated");
-        driver.quit();
     }
         @Test
         public void negativeZipCodeTestOneDigit() {
-            WebDriverManager.chromedriver().setup();
-            WebDriver driver = new ChromeDriver();
-            driver.manage().window().maximize();
             driver.get("https://www.sharelane.com/cgi-bin/register.py");
             driver.findElement(By.name("zip_code")).sendKeys("1");
             WebElement continueButton = driver.findElement(By.cssSelector("[value='Continue']"));
             continueButton.click();
             Assert.assertTrue(driver.findElement(By.className("error_message")).isDisplayed(), "Zipcode consisting of one digit has been validated");
-            driver.quit();
         }
          @Test
         public void positiveSignUpTest () {
-            WebDriverManager.chromedriver().setup();
-            WebDriver driver = new ChromeDriver();
-            driver.manage().window().maximize();
             driver.get("https://www.sharelane.com/cgi-bin/register.py?page=1&zip_code=54321");
             driver.findElement(By.name("first_name")).sendKeys("Mary");
             driver.findElement(By.name("email")).sendKeys("amigo@mail.ru");
@@ -45,12 +47,9 @@ public class SingUpTest {
             WebElement registerButton = driver.findElement(By.cssSelector("[value='Register']"));
             registerButton.click();
             Assert.assertTrue(driver.findElement(By.className("confirmation_message")).isDisplayed(), "Positive test with correct data has failed");
-            driver.quit();
         }
         @Test
         public void negativeSignUpTestInvalidEmail () {
-            WebDriverManager.chromedriver().setup();
-            WebDriver driver = new ChromeDriver();
             driver.get("https://www.sharelane.com/cgi-bin/register.py?page=1&zip_code=33333");
             driver.findElement(By.name("first_name")).sendKeys("Mary");
             driver.findElement(By.name("email")).sendKeys("amigo");
@@ -59,12 +58,9 @@ public class SingUpTest {
             WebElement registerButton3 = driver.findElement(By.cssSelector("[value='Register']"));
             registerButton3.click();
             Assert.assertTrue(driver.findElement(By.className("error_message")).isDisplayed(), "Wrong email has been validated");
-            driver.quit();
         }
         @Test
         public void negativeSignUpTestShortPassword () {
-            WebDriverManager.chromedriver().setup();
-            WebDriver driver = new ChromeDriver();
             driver.get("https://www.sharelane.com/cgi-bin/register.py?page=1&zip_code=88888");
             driver.findElement(By.name("first_name")).sendKeys("Mary");
             driver.findElement(By.name("email")).sendKeys("amigo11@mail.ru");
@@ -73,7 +69,23 @@ public class SingUpTest {
             WebElement registerButton= driver.findElement(By.cssSelector("[value='Register']"));
             registerButton.click();
             Assert.assertTrue(driver.findElement(By.className("error_message")).isDisplayed(), "Password consisting of one digit has been validated");
-            driver.quit();
+        }
+        @Test
+        public void positiveTestAddBookToCart () {
+            driver.get("https://www.sharelane.com/cgi-bin/main.py");
+            WebElement testPortalButton = driver.findElement(By.xpath("/html/body/center/table/tbody/tr[6]/td/a[2]"));
+            testPortalButton.click();
+            WebElement accountCreatorButton = driver.findElement(By.xpath("/html/body/center/table/tbody/tr/td[1]/table/tbody/tr[2]/td[2]/p/a"));
+            accountCreatorButton.click();
+            WebElement newAccountButton = driver.findElement(By.cssSelector("[value='Create new user account']"));
+            newAccountButton.click();
+            WebElement autoLogInButton = driver.findElement(By.cssSelector("[value='Auto Login']"));
+            autoLogInButton.click();
+            driver.get("https://www.sharelane.com/cgi-bin/show_book.py?book_id=2");
+            WebElement addToCartButton = driver.findElement(By.xpath("/html/body/center/table/tbody/tr[5]/td/table/tbody/tr/td[2]/p[2]/a"));
+            addToCartButton.click();
+            Assert.assertTrue(driver.findElement(By.className("confirmation_message")).isDisplayed(), "Positive test with correct data has failed");
+
         }
 
     }
