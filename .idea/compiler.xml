@@ -6,7 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+<<<<<<< HEAD
         <module name="SharelineMariaLakhanich" />
+=======
+        <module name="ShareLine_Maria_Lakhanich" />
+>>>>>>> 46832ca (Initial commit)
       </profile>
     </annotationProcessing>
   </component>
