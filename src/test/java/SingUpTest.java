@@ -4,20 +4,18 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 public class SingUpTest {
     public WebDriver driver;
 
-    @BeforeMethod
+    @BeforeClass
     public void setUp () {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         }
-     @AfterMethod
+     @AfterClass
      public void quit () {
         driver.quit();
      }
@@ -73,16 +71,16 @@ public class SingUpTest {
         @Test
         public void positiveTestAddBookToCart () {
             driver.get("https://www.sharelane.com/cgi-bin/main.py");
-            WebElement testPortalButton = driver.findElement(By.xpath("/html/body/center/table/tbody/tr[6]/td/a[2]"));
+            WebElement testPortalButton = driver.findElement(By.cssSelector("[href='../test_portal.html']"));
             testPortalButton.click();
-            WebElement accountCreatorButton = driver.findElement(By.xpath("/html/body/center/table/tbody/tr/td[1]/table/tbody/tr[2]/td[2]/p/a"));
+            WebElement accountCreatorButton = driver.findElement(By.cssSelector("[href='../cgi-bin/create_account.py']"));
             accountCreatorButton.click();
             WebElement newAccountButton = driver.findElement(By.cssSelector("[value='Create new user account']"));
             newAccountButton.click();
             WebElement autoLogInButton = driver.findElement(By.cssSelector("[value='Auto Login']"));
             autoLogInButton.click();
             driver.get("https://www.sharelane.com/cgi-bin/show_book.py?book_id=2");
-            WebElement addToCartButton = driver.findElement(By.xpath("/html/body/center/table/tbody/tr[5]/td/table/tbody/tr/td[2]/p[2]/a"));
+            WebElement addToCartButton = driver.findElement(By.cssSelector("[src='../images/add_to_cart.gif']"));
             addToCartButton.click();
             Assert.assertTrue(driver.findElement(By.className("confirmation_message")).isDisplayed(), "Positive test with correct data has failed");
 
